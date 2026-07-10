@@ -1,5 +1,121 @@
 public class Program
 {
+        static void RegistrarProducto(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
+    {
+        if (cantidadProductos >= 20) // Capacidad máxima del catálogo (20)
+        {
+            Console.WriteLine("El catalogo esta lleno. No se pueden registrar mas productos.");
+            return;
+        }
+        int codigo = 0;
+        bool codigoValido = false;
+        do //Bucle para validar el codigo del producto
+        {
+        try
+        {
+            Console.Write("Ingrese el nuevo codigo del producto: ");
+            codigo = int.Parse(Console.ReadLine());
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Codigo invalido. Intente nuevamente.");
+            continue;
+        }
+        codigoValido = true; // Asumimos que el codigo es valido hasta que se demuestre lo contrario
+        for (int i = 0; i < cantidadProductos; i++)
+        {
+            if (codigos[i] == codigo)
+            {
+                codigoValido = false;
+                Console.WriteLine("Ya existe un producto con ese codigo.");
+                break;
+            }
+        }
+        }while (!codigoValido);
+
+        string nombre;
+        bool nombreValido = false;
+        do //bucle para validar el nombre del producto
+        {
+            Console.Write("Ingrese el nombre del producto: ");
+            nombre = Console.ReadLine();
+
+            if (nombre == null || nombre.Trim() == "")
+            {
+                Console.WriteLine("El nombre no puede estar vacio. Intente nuevamente.");
+            }
+            else
+            {
+                nombreValido = true;
+            }
+
+        } while (!nombreValido);
+
+        double precio = 0;
+        bool precioValido = false;
+
+        do//bucle para validar el precio del producto
+        {
+            try
+            {
+                Console.Write("Ingrese el precio del producto: ");
+                precio = double.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Precio invalido. Debe ser un numero. Intente nuevamente.");
+                continue;
+            }
+
+            if (precio <= 0)
+            {
+                Console.WriteLine("El precio debe ser mayor a 0. Intente nuevamente.");
+            }
+            else
+            {
+                precioValido = true;
+            }
+
+        } while (!precioValido);
+
+        int stock = 0;
+        bool stockValido = false;
+
+        do //bucle para validar el stock del producto
+        {
+            try
+            {
+                Console.Write("Ingrese el stock inicial: ");
+                stock = int.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Stock invalido. Debe ser un numero entero. Intente nuevamente.");
+                continue;
+            }
+
+            if (stock < 0)
+            {
+                Console.WriteLine("El stock no puede ser negativo. Intente nuevamente.");
+            }
+            else
+            {
+                stockValido = true;
+            }
+
+        } while (!stockValido);
+
+        // Todos los datos son validos: se registra en la siguiente posicion libre
+        codigos[cantidadProductos] = codigo;
+        nombres[cantidadProductos] = nombre;
+        precios[cantidadProductos] = precio;
+        stocks[cantidadProductos] = stock;
+
+        cantidadProductos++;// Incrementar el contador de productos registrados
+
+        Console.WriteLine("Producto registrado correctamente.");
+    }
+
     public static void Main(string[] args)
     {
         // Arreglos paralelos del catálogo (capacidad fija de 20)
@@ -11,7 +127,6 @@ public class Program
         int cantidadProductos = 0; // Contador de productos registrados
         int opcion = 0; // Variable para almacenar la opción del menú
 
-            Console.WriteLine();
             Console.WriteLine("===== TECHSHOP - MENU PRINCIPAL =====");
             Console.WriteLine("1. Registrar un producto");
             Console.WriteLine("2. Mostrar el catalogo completo");
@@ -35,11 +150,11 @@ public class Program
                 Console.WriteLine("Entrada invalida. Por favor, ingresa un numero del 1 al 9 o 0 para salir.");
                 continue;   
             }
-            
+
             switch (opcion)
             {
                 case 1:
-                    Console.WriteLine("Funcionalidad 1: Registrar un producto.");
+                    RegistrarProducto(codigos, nombres, precios, stocks, ref cantidadProductos);
                     break;
 
                 case 2:
