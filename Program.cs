@@ -1,108 +1,113 @@
 public class Program
-{
-    // Funcionalidad 1: Registrar un producto
-        static void RegistrarProducto(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
     {
-        if (cantidadProductos >= 20) // Capacidad máxima del catálogo (20)
+        // Funcionalidad 1: Registrar un producto
+        static void RegistrarProducto(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
         {
-            Console.WriteLine("El catalogo esta lleno. No se pueden registrar mas productos.");
-            return;
-        }
+            if (cantidadProductos >= 20) // Capacidad máxima del catálogo (20)
+            {
+                Console.WriteLine("El catalogo esta lleno. No se pueden registrar mas productos.");
+                return;
+            }
+
+        //Codigo del producto: Debe ser unico y un numero entero
         int codigo = 0;
         bool codigoValido = false;
+
         do //Bucle para validar el codigo del producto
         {
         try
-        {
-            Console.Write("Ingrese el nuevo codigo del producto: ");
-            codigo = int.Parse(Console.ReadLine());
-        }
+            {
+                Console.Write("Ingrese el nuevo codigo del producto: ");
+                codigo = int.Parse(Console.ReadLine());
+            }
         catch (Exception)
-        {
-            Console.WriteLine("Codigo invalido. Intente nuevamente.");
-            continue;
-        }
+            {
+                Console.WriteLine("Codigo invalido. Intente nuevamente.");
+                continue;
+            }
         codigoValido = true; // Asumimos que el codigo es valido hasta que se demuestre lo contrario
         for (int i = 0; i < cantidadProductos; i++)
-        {
-            if (codigos[i] == codigo)
             {
-                codigoValido = false;
-                Console.WriteLine("Ya existe un producto con ese codigo.");
-                break;
+                if (codigos[i] == codigo)
+                {
+                    codigoValido = false;
+                    Console.WriteLine("Ya existe un producto con ese codigo.");
+                    break;
+                }
             }
-        }
         }while (!codigoValido);
 
+        //Nombre del producto: No puede estar vacio
         string nombre;
         bool nombreValido = false;
+
         do //bucle para validar el nombre del producto
         {
             Console.Write("Ingrese el nombre del producto: ");
             nombre = Console.ReadLine();
 
-            if (nombre == null || nombre.Trim() == "")
-            {
-                Console.WriteLine("El nombre no puede estar vacio. Intente nuevamente.");
-            }
-            else
-            {
-                nombreValido = true;
-            }
-
+        if (nombre == null || nombre.Trim() == "")
+        {
+            Console.WriteLine("El nombre no puede estar vacio. Intente nuevamente.");
+        }
+        else
+        {
+            nombreValido = true;
+        }
         } while (!nombreValido);
 
+        //Precio del producto: Debe ser un numero mayor a 0
         double precio = 0;
         bool precioValido = false;
 
         do//bucle para validar el precio del producto
         {
             try
-            {
-                Console.Write("Ingrese el precio del producto: ");
-                precio = double.Parse(Console.ReadLine());
-            }
+                {
+                    Console.Write("Ingrese el precio del producto: ");
+                    precio = double.Parse(Console.ReadLine());
+                }
             catch (Exception)
-            {
-                Console.WriteLine("Precio invalido. Debe ser un numero. Intente nuevamente.");
-                continue;
-            }
+                {
+                    Console.WriteLine("Precio invalido. Debe ser un numero. Intente nuevamente.");
+                    continue;
+                }
 
-            if (precio <= 0)
-            {
-                Console.WriteLine("El precio debe ser mayor a 0. Intente nuevamente.");
-            }
-            else
-            {
-                precioValido = true;
-            }
-
+        if (precio <= 0)
+        {
+            Console.WriteLine("El precio debe ser mayor a 0. Intente nuevamente.");
+        }
+        else
+        {
+            precioValido = true;
+        }
         } while (!precioValido);
 
+        //Stock del producto: Debe ser un numero entero mayor o igual a 0
         int stock = 0;
         bool stockValido = false;
 
         do //bucle para validar el stock del producto
         {
             try
-            {
-                Console.Write("Ingrese el stock inicial: ");
-                stock = int.Parse(Console.ReadLine());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Stock invalido. Debe ser un numero entero. Intente nuevamente.");
-                continue;
-            }
+                {
+                    Console.Write("Ingrese el stock inicial: ");
+                    stock = int.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Stock invalido. Debe ser un numero entero. Intente nuevamente.");
+                    continue;
+                }
 
-            if (stock < 0)
-            {
-                Console.WriteLine("El stock no puede ser negativo. Intente nuevamente.");
-            }
-            else
-            {
-                stockValido = true;
-            }
+        if (stock < 0)
+        {
+        Console.WriteLine("El stock no puede ser negativo. Intente nuevamente.");
+        }
+        else
+        {
+        stockValido = true;
+        }
 
         } while (!stockValido);
         
@@ -115,83 +120,83 @@ public class Program
         cantidadProductos++;// Incrementar el contador de productos registrados
 
         Console.WriteLine("Producto registrado correctamente.");
-    }
+        }
 
-    // Funcionalidad 2: Mostrar el catálogo completo
-    static void MostrarCatalogo(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
-{
-    if (cantidadProductos == 0)
-    {
+        // Funcionalidad 2: Mostrar el catálogo completo
+        static void MostrarCatalogo(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
+        {
+        if (cantidadProductos == 0)
+        {
         Console.WriteLine("El catalogo esta vacio.");
         return;
-    }
+        }
 
-    for (int i = 0; i < cantidadProductos; i++)
-    {
+        for (int i = 0; i < cantidadProductos; i++)
+        {
         Console.WriteLine("Codigo: " + codigos[i] + " | Nombre: " + nombres[i] + " | Precio: " + precios[i] + " | Stock: " + stocks[i]);
-    }
-}
+        }
+        }
 
         //Funcionaliadd 3: Buscar un producto por codigo
         static int BuscarProducto(int[] codigos, int cantidadProductos, int codigoBuscado)
         {
-            for (int i = 0; i < cantidadProductos; i++)
-            {
-                if (codigos[i] == codigoBuscado)
-                {
-                    return i;
-                }
-            }
-            return -1;
+        for (int i = 0; i < cantidadProductos; i++)
+        {
+        if (codigos[i] == codigoBuscado)
+        {
+            return i;
+        }
+        }
+        return -1;
         }
         static void BuscarPorCodigo(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
         {
-            int codigoBuscado = 0;
-            try
-            {
-                Console.Write("Ingrese el codigo a buscar: ");
-                codigoBuscado = int.Parse(Console.ReadLine());
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Codigo invalido.");
-                return;
-            }
-
-            int indice = BuscarProducto(codigos, cantidadProductos, codigoBuscado);
-
-            if (indice == -1)
-            {
-                Console.WriteLine("No se encontro un producto con ese codigo.");
-                return;
-            }
-
-            Console.WriteLine("Codigo: " + codigos[indice] + 
-            " | Nombre: " + nombres[indice] + 
-            " | Precio: " + precios[indice] + 
-            " | Stock: " + stocks[indice]);
-        }
-    //Funcionalidad 4: Actualizar stock (sumar o restar)
-    static void ActualizarStock(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
-    {
         int codigoBuscado = 0;
         try
         {
-            Console.Write("Ingrese el codigo del producto a actualizar: ");
-            codigoBuscado = int.Parse(Console.ReadLine());
+        Console.Write("Ingrese el codigo a buscar: ");
+        codigoBuscado = int.Parse(Console.ReadLine());
         }
         catch (Exception)
         {
-            Console.WriteLine("Codigo invalido.");
-            return;
+        Console.WriteLine("Codigo invalido.");
+        return;
         }
 
         int indice = BuscarProducto(codigos, cantidadProductos, codigoBuscado);
 
         if (indice == -1)
         {
-            Console.WriteLine("No se encontro un producto con ese codigo.");
-            return;
+        Console.WriteLine("No se encontro un producto con ese codigo.");
+        return;
+        }
+
+        Console.WriteLine("Codigo: " + codigos[indice] + 
+        " | Nombre: " + nombres[indice] + 
+        " | Precio: " + precios[indice] + 
+        " | Stock: " + stocks[indice]);
+        }
+        //Funcionalidad 4: Actualizar stock (sumar o restar)
+        static void ActualizarStock(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
+        {
+        int codigoBuscado = 0;
+        try
+        {
+        Console.Write("Ingrese el codigo del producto a actualizar: ");
+        codigoBuscado = int.Parse(Console.ReadLine());
+        }
+        catch (Exception)
+        {
+        Console.WriteLine("Codigo invalido.");
+        return;
+        }
+
+        int indice = BuscarProducto(codigos, cantidadProductos, codigoBuscado);
+
+        if (indice == -1)
+        {
+        Console.WriteLine("No se encontro un producto con ese codigo.");
+        return;
         }
 
         Console.WriteLine("Producto: " + nombres[indice]);
@@ -200,27 +205,69 @@ public class Program
         int cantidad = 0;
         try
         {
-            Console.Write("Ingrese la cantidad (positiva para sumar, negativa para restar): ");
-            cantidad = int.Parse(Console.ReadLine());
+        Console.Write("Ingrese la cantidad (positiva para sumar, negativa para restar): ");
+        cantidad = int.Parse(Console.ReadLine());
         }
         catch (Exception)
         {
-            Console.WriteLine("Cantidad invalida.");
-            return;
+        Console.WriteLine("Cantidad invalida.");
+        return;
         }
 
         int nuevoStock = stocks[indice] + cantidad;
 
         if (nuevoStock < 0)
         {
-            Console.WriteLine("Operacion rechazada: el stock no puede quedar negativo.");
-            return;
+        Console.WriteLine("Operacion rechazada: el stock no puede quedar negativo.");
+        return;
         }
 
         stocks[indice] = nuevoStock;
         Console.WriteLine("Stock actualizado correctamente. Nuevo stock: " + stocks[indice]);
-    }
+        }
 
+        // Swap: Intercambiar productos en el catálogo (utilizado para ordenar) - Reglas 4 y 7
+        static void IntercambiarProductos(int[] codigos, string[] nombres, double[] precios, int[] stocks, int j)
+        {
+            //Se definen variables temporales para almacenar los valores de los productos a intercambiar
+            double tempPrecio = precios[j];
+            precios[j] = precios[j + 1];
+            precios[j + 1] = tempPrecio;
+
+            int tempCodigo = codigos[j];
+            codigos[j] = codigos[j + 1];
+            codigos[j + 1] = tempCodigo;
+
+            string tempNombre = nombres[j];
+            nombres[j] = nombres[j + 1];
+            nombres[j + 1] = tempNombre;
+
+            int tempStock = stocks[j];
+            stocks[j] = stocks[j + 1];
+            stocks[j + 1] = tempStock;
+        }
+
+        // Funcionalidad 5: Ordenar el catálogo por precio (de menor a mayor)
+        static void OrdenarPorPrecio(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
+        {
+            if (cantidadProductos == 0)
+            {
+                Console.WriteLine("El catalogo esta vacio. No hay nada que ordenar.");
+                return;
+            }
+
+            for (int i = 0; i < cantidadProductos - 1; i++)
+            {
+                for (int j = 0; j < cantidadProductos - 1 - i; j++)
+                {
+                    if (precios[j] > precios[j + 1])
+                    {
+                        IntercambiarProductos(codigos, nombres, precios, stocks, j);//Llamada a función Swap
+                    }
+                }
+            }
+            Console.WriteLine("Catalogo ordenado por precio (ascendente).");
+        }
 
     public static void Main(string[] args)
     {
@@ -276,7 +323,7 @@ public class Program
                     break;
 
                 case 5:
-                    Console.WriteLine("Funcionalidad 5: Ordenar el catalogo por precio.");
+                    OrdenarPorPrecio(codigos, nombres, precios, stocks, cantidadProductos);
                     break;
 
                 case 6:
