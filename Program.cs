@@ -275,6 +275,94 @@ public class Program
             }
             Console.WriteLine("Catalogo ordenado por precio (ascendente).");
         }
+        //Funcionalidad 6: Insertar un producto en una posición específica
+        static void InsertarEnPosicion(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
+        {
+            if (cantidadProductos >= 20)
+            {
+                Console.WriteLine("El catalogo esta lleno. No se pueden insertar mas productos.");
+                return;
+            }
+
+            int posicion;
+            try
+            {
+                Console.Write("Ingrese la posicion donde insertar (0 a " + cantidadProductos + "): ");
+                posicion = int.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Posicion invalida.");
+                return;
+            }
+
+            if (posicion < 0 || posicion > cantidadProductos)
+            {
+                Console.WriteLine("Posicion fuera de rango.");
+                return;
+            }
+
+            int codigo, stock;
+            string nombre;
+            double precio;
+
+            PedirDatosProducto(codigos, cantidadProductos, out codigo, out nombre, out precio, out stock);
+
+            // Abrir espacio: desde el final hacia la posicion de insercion, desplazando a la derecha
+            for (int i = cantidadProductos; i > posicion; i--)
+            {
+                codigos[i] = codigos[i - 1];
+                nombres[i] = nombres[i - 1];
+                precios[i] = precios[i - 1];
+                stocks[i] = stocks[i - 1];
+            }
+
+            codigos[posicion] = codigo;
+            nombres[posicion] = nombre;
+            precios[posicion] = precio;
+            stocks[posicion] = stock;
+
+            cantidadProductos++;
+
+            Console.WriteLine("Producto insertado correctamente en la posicion " + posicion + ".");
+        }
+        // Funcionalidad 7: Eliminar un producto por codigo
+        static void EliminarPorCodigo(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
+        {
+            int codigoBuscado = 0;
+            try
+            {
+                Console.Write("Ingrese el codigo del producto a eliminar: ");
+                codigoBuscado = int.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Codigo invalido.");
+                return;
+            }
+
+            int indice = BuscarProducto(codigos, cantidadProductos, codigoBuscado);
+
+            if (indice == -1)
+            {
+                Console.WriteLine("No se encontro un producto con ese codigo.");
+                return;
+            }
+
+            Console.WriteLine("Se eliminara: " + nombres[indice]);
+
+            for (int i = indice; i < cantidadProductos - 1; i++)
+            {
+                codigos[i] = codigos[i + 1];
+                nombres[i] = nombres[i + 1];
+                precios[i] = precios[i + 1];
+                stocks[i] = stocks[i + 1];
+            }
+
+            cantidadProductos--;
+
+            Console.WriteLine("Producto eliminado correctamente.");
+        }
 
     public static void Main(string[] args)
     {
@@ -334,11 +422,11 @@ public class Program
                     break;
 
                 case 6:
-                    Console.WriteLine("Funcionalidad 6: Insertar un producto en una posicion especifica.");
+                    InsertarEnPosicion(codigos, nombres, precios, stocks, ref cantidadProductos);
                     break;
 
                 case 7:
-                    Console.WriteLine("Funcionalidad 7: Eliminar un producto por codigo.");
+                    EliminarPorCodigo(codigos, nombres, precios, stocks, ref cantidadProductos);
                     break;
 
                 case 8:
