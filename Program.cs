@@ -1,5 +1,6 @@
 public class Program
 {
+    // Funcionalidad 1: Registrar un producto
         static void RegistrarProducto(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
     {
         if (cantidadProductos >= 20) // Capacidad máxima del catálogo (20)
@@ -104,7 +105,7 @@ public class Program
             }
 
         } while (!stockValido);
-
+        
         // Todos los datos son validos: se registra en la siguiente posicion libre
         codigos[cantidadProductos] = codigo;
         nombres[cantidadProductos] = nombre;
@@ -115,6 +116,111 @@ public class Program
 
         Console.WriteLine("Producto registrado correctamente.");
     }
+
+    // Funcionalidad 2: Mostrar el catálogo completo
+    static void MostrarCatalogo(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
+{
+    if (cantidadProductos == 0)
+    {
+        Console.WriteLine("El catalogo esta vacio.");
+        return;
+    }
+
+    for (int i = 0; i < cantidadProductos; i++)
+    {
+        Console.WriteLine("Codigo: " + codigos[i] + " | Nombre: " + nombres[i] + " | Precio: " + precios[i] + " | Stock: " + stocks[i]);
+    }
+}
+
+        //Funcionaliadd 3: Buscar un producto por codigo
+        static int BuscarProducto(int[] codigos, int cantidadProductos, int codigoBuscado)
+        {
+            for (int i = 0; i < cantidadProductos; i++)
+            {
+                if (codigos[i] == codigoBuscado)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        static void BuscarPorCodigo(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
+        {
+            int codigoBuscado = 0;
+            try
+            {
+                Console.Write("Ingrese el codigo a buscar: ");
+                codigoBuscado = int.Parse(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Codigo invalido.");
+                return;
+            }
+
+            int indice = BuscarProducto(codigos, cantidadProductos, codigoBuscado);
+
+            if (indice == -1)
+            {
+                Console.WriteLine("No se encontro un producto con ese codigo.");
+                return;
+            }
+
+            Console.WriteLine("Codigo: " + codigos[indice] + 
+            " | Nombre: " + nombres[indice] + 
+            " | Precio: " + precios[indice] + 
+            " | Stock: " + stocks[indice]);
+        }
+    //Funcionalidad 4: Actualizar stock (sumar o restar)
+    static void ActualizarStock(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
+    {
+        int codigoBuscado = 0;
+        try
+        {
+            Console.Write("Ingrese el codigo del producto a actualizar: ");
+            codigoBuscado = int.Parse(Console.ReadLine());
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Codigo invalido.");
+            return;
+        }
+
+        int indice = BuscarProducto(codigos, cantidadProductos, codigoBuscado);
+
+        if (indice == -1)
+        {
+            Console.WriteLine("No se encontro un producto con ese codigo.");
+            return;
+        }
+
+        Console.WriteLine("Producto: " + nombres[indice]);
+        Console.WriteLine("Stock actual: " + stocks[indice]);
+
+        int cantidad = 0;
+        try
+        {
+            Console.Write("Ingrese la cantidad (positiva para sumar, negativa para restar): ");
+            cantidad = int.Parse(Console.ReadLine());
+        }
+        catch (Exception)
+        {
+            Console.WriteLine("Cantidad invalida.");
+            return;
+        }
+
+        int nuevoStock = stocks[indice] + cantidad;
+
+        if (nuevoStock < 0)
+        {
+            Console.WriteLine("Operacion rechazada: el stock no puede quedar negativo.");
+            return;
+        }
+
+        stocks[indice] = nuevoStock;
+        Console.WriteLine("Stock actualizado correctamente. Nuevo stock: " + stocks[indice]);
+    }
+
 
     public static void Main(string[] args)
     {
@@ -158,15 +264,15 @@ public class Program
                     break;
 
                 case 2:
-                    Console.WriteLine("Funcionalidad 2: Mostrar el catalogo completo.");
+                    MostrarCatalogo(codigos, nombres, precios, stocks, cantidadProductos);
                     break;
 
                 case 3:
-                    Console.WriteLine("Funcionalidad 3: Buscar un producto por codigo.");
+                    BuscarPorCodigo(codigos, nombres, precios, stocks, cantidadProductos);
                     break;
 
                 case 4:
-                    Console.WriteLine("Funcionalidad 4: Actualizar stock.");
+                    ActualizarStock(codigos, nombres, precios, stocks, cantidadProductos);
                     break;
 
                 case 5:
