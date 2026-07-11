@@ -287,7 +287,7 @@ public class Program
             int posicion;
             try
             {
-                Console.Write("Ingrese la posicion donde insertar (0 a " + cantidadProductos + "): ");
+                Console.Write("Ingrese la posicion donde insertar (0 a " + (cantidadProductos - 1) + "): ");
                 posicion = int.Parse(Console.ReadLine());
             }
             catch (Exception)
@@ -296,7 +296,7 @@ public class Program
                 return;
             }
 
-            if (posicion < 0 || posicion > cantidadProductos)
+            if (posicion < 0 || posicion > cantidadProductos - 1)
             {
                 Console.WriteLine("Posicion fuera de rango.");
                 return;
@@ -363,6 +363,72 @@ public class Program
 
             Console.WriteLine("Producto eliminado correctamente.");
         }
+        // Funcionalidad 8: Ordenar el catalogo por nombre (burbuja, alfabetico)
+        static void OrdenarPorNombre(int[] codigos, string[] nombres, double[] precios, int[] stocks, int cantidadProductos)
+        {
+            if (cantidadProductos == 0)
+            {
+                Console.WriteLine("El catalogo esta vacio. No hay nada que ordenar.");
+                return;
+            }
+
+            for (int i = 0; i < cantidadProductos - 1; i++)
+            {
+                for (int j = 0; j < cantidadProductos - 1 - i; j++)
+                {
+                    if (nombres[j].CompareTo(nombres[j + 1]) > 0)
+                    {
+                        IntercambiarProductos(codigos, nombres, precios, stocks, j);
+                    }
+                }
+            }
+
+            Console.WriteLine("Catalogo ordenado por nombre (alfabetico).");
+        }
+        // Demo: parametro por valor (el original NO cambia)
+        static void ModificarPorValor(double precio)
+        {
+            precio = precio * 2;
+            Console.WriteLine("Dentro de la funcion (por valor): " + precio);
+        }
+
+        // Demo: parametro por referencia (el original SI cambia)
+        static void ModificarPorReferencia(double[] precios, int indice)
+        {
+            precios[indice] = precios[indice] * 2;
+            Console.WriteLine("Dentro de la funcion (por referencia): " + precios[indice]);
+        }
+
+        // Funcionalidad 9: Demostracion valor vs. referencia
+        static void DemoValorReferencia(double[] precios, int cantidadProductos)
+        {
+            if (cantidadProductos == 0)
+            {
+                Console.WriteLine("No hay productos registrados para la demostracion.");
+                return;
+            }
+
+            Console.WriteLine("=== DEMOSTRACION: VALOR VS. REFERENCIA ===");
+
+            // Demo por valor
+            double precioOriginal = precios[0];
+            Console.WriteLine("Precio original antes de la funcion (por valor): " + precioOriginal);
+            ModificarPorValor(precioOriginal);
+            Console.WriteLine("Precio original despues de la funcion (por valor): " + precioOriginal);
+            Console.WriteLine("-> El valor original NO cambio porque se paso una copia.");
+
+            Console.WriteLine();
+
+            // Demo por referencia (arreglo)
+            Console.WriteLine("Precio original antes de la funcion (por referencia): " + precios[0]);
+            ModificarPorReferencia(precios, 0);
+            Console.WriteLine("Precio original despues de la funcion (por referencia): " + precios[0]);
+            Console.WriteLine("-> El valor original SI cambio porque se paso el arreglo por referencia.");
+
+            // Restaurar el valor original para no alterar el catalogo
+            precios[0] = precioOriginal;
+            Console.WriteLine("Precio restaurado al valor original: " + precios[0]);
+        }
 
     public static void Main(string[] args)
     {
@@ -389,7 +455,7 @@ public class Program
         do
         {
             Console.Write("Elige una opcion: ");
-            try // Intentar convertir la entrada a un número entero
+            try
             {
                 opcion = int.Parse(Console.ReadLine());
             }
@@ -406,6 +472,7 @@ public class Program
                     break;
 
                 case 2:
+                    Console.WriteLine("Total de productos registrados: " + cantidadProductos);
                     MostrarCatalogo(codigos, nombres, precios, stocks, cantidadProductos);
                     break;
 
@@ -430,11 +497,11 @@ public class Program
                     break;
 
                 case 8:
-                    Console.WriteLine("Funcionalidad 8: Ordenar el catalogo por nombre.");
+                    OrdenarPorNombre(codigos, nombres, precios, stocks, cantidadProductos);
                     break;
 
                 case 9:
-                    Console.WriteLine("Funcionalidad 9: Demostracion: Valor vs. referencia.");
+                    DemoValorReferencia(precios, cantidadProductos);
                     break;
 
                 case 0:
