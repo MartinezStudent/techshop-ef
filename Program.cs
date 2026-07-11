@@ -1,95 +1,87 @@
 public class Program
     {
-        // Funcionalidad 1: Registrar un producto
-        static void RegistrarProducto(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
+        // Refactor: Datos de productos - Reglas 1 y 5
+        // Pide y valida codigo, nombre, precio y stock de un nuevo producto.
+        // Devuelve true si todos los datos son validos; false si falla en alguna condición
+        static bool PedirDatosProducto(int[] codigos, int cantidadProductos, out int codigo, out string nombre, out double precio, out int stock)
         {
-            if (cantidadProductos >= 20) // Capacidad máxima del catálogo (20)
+            //Codigo del producto: Debe ser unico y un numero entero
+            codigo = 0;
+            bool codigoValido = false;
+            do
             {
-                Console.WriteLine("El catalogo esta lleno. No se pueden registrar mas productos.");
-                return;
-            }
-
-        //Codigo del producto: Debe ser unico y un numero entero
-        int codigo = 0;
-        bool codigoValido = false;
-
-        do //Bucle para validar el codigo del producto
-        {
-        try
-            {
-                Console.Write("Ingrese el nuevo codigo del producto: ");
-                codigo = int.Parse(Console.ReadLine());
-            }
-        catch (Exception)
-            {
-                Console.WriteLine("Codigo invalido. Intente nuevamente.");
-                continue;
-            }
-        codigoValido = true; // Asumimos que el codigo es valido hasta que se demuestre lo contrario
-        for (int i = 0; i < cantidadProductos; i++)
-            {
-                if (codigos[i] == codigo)
+                try
                 {
-                    codigoValido = false;
-                    Console.WriteLine("Ya existe un producto con ese codigo.");
-                    break;
+                    Console.Write("Ingrese el codigo del producto: ");
+                    codigo = int.Parse(Console.ReadLine());
                 }
-            }
-        }while (!codigoValido);
+                catch (Exception)
+                {
+                    Console.WriteLine("Codigo invalido. Intente nuevamente.");
+                    continue;
+                }
 
-        //Nombre del producto: No puede estar vacio
-        string nombre;
-        bool nombreValido = false;
+                codigoValido = true;
+                for (int i = 0; i < cantidadProductos; i++)
+                {
+                    if (codigos[i] == codigo)
+                    {
+                        codigoValido = false;
+                        Console.WriteLine("Ya existe un producto con ese codigo.");
+                        break;
+                    }
+                }
+            } while (!codigoValido);
+            
+            //Nombre del producto: No puede estar vacio
+            nombre = "";
+            bool nombreValido = false;
+            do
+            {
+                Console.Write("Ingrese el nombre del producto: ");
+                nombre = Console.ReadLine();
 
-        do //bucle para validar el nombre del producto
-        {
-            Console.Write("Ingrese el nombre del producto: ");
-            nombre = Console.ReadLine();
+                if (nombre == null || nombre.Trim() == "")
+                {
+                    Console.WriteLine("El nombre no puede estar vacio. Intente nuevamente.");
+                }
+                else
+                {
+                    nombreValido = true;
+                }
+            } while (!nombreValido);
 
-        if (nombre == null || nombre.Trim() == "")
-        {
-            Console.WriteLine("El nombre no puede estar vacio. Intente nuevamente.");
-        }
-        else
-        {
-            nombreValido = true;
-        }
-        } while (!nombreValido);
-
-        //Precio del producto: Debe ser un numero mayor a 0
-        double precio = 0;
-        bool precioValido = false;
-
-        do//bucle para validar el precio del producto
-        {
-            try
+            precio = 0;
+            bool precioValido = false;
+            do
+            {
+                try
                 {
                     Console.Write("Ingrese el precio del producto: ");
                     precio = double.Parse(Console.ReadLine());
                 }
-            catch (Exception)
+                catch (Exception)
                 {
                     Console.WriteLine("Precio invalido. Debe ser un numero. Intente nuevamente.");
                     continue;
                 }
 
-        if (precio <= 0)
-        {
-            Console.WriteLine("El precio debe ser mayor a 0. Intente nuevamente.");
-        }
-        else
-        {
-            precioValido = true;
-        }
-        } while (!precioValido);
+                if (precio <= 0)
+                {
+                    Console.WriteLine("El precio debe ser mayor a 0. Intente nuevamente.");
+                }
+                else
+                {
+                    precioValido = true;
+                }
+            } while (!precioValido);
 
-        //Stock del producto: Debe ser un numero entero mayor o igual a 0
-        int stock = 0;
-        bool stockValido = false;
-
-        do //bucle para validar el stock del producto
-        {
-            try
+            //Stock del producto: Debe ser un numero entero mayor o igual a 0
+            stock = 0;
+            bool stockValido = false;
+            do
+            {
+                try
                 {
                     Console.Write("Ingrese el stock inicial: ");
                     stock = int.Parse(Console.ReadLine());
@@ -100,26 +92,41 @@ public class Program
                     continue;
                 }
 
-        if (stock < 0)
-        {
-        Console.WriteLine("El stock no puede ser negativo. Intente nuevamente.");
+                if (stock < 0)
+                {
+                    Console.WriteLine("El stock no puede ser negativo. Intente nuevamente.");
+                }
+                else
+                {
+                    stockValido = true;
+                }
+            } while (!stockValido);
+
+            return true;
         }
-        else
+        // Funcionalidad 1: Registrar un producto
+        static void RegistrarProducto(int[] codigos, string[] nombres, double[] precios, int[] stocks, ref int cantidadProductos)
         {
-        stockValido = true;
-        }
+            if (cantidadProductos >= 20)
+            {
+                Console.WriteLine("El catalogo esta lleno. No se pueden registrar mas productos.");
+                return;
+            }
 
-        } while (!stockValido);
-        
-        // Todos los datos son validos: se registra en la siguiente posicion libre
-        codigos[cantidadProductos] = codigo;
-        nombres[cantidadProductos] = nombre;
-        precios[cantidadProductos] = precio;
-        stocks[cantidadProductos] = stock;
+            int codigo, stock;
+            string nombre;
+            double precio;
 
-        cantidadProductos++;// Incrementar el contador de productos registrados
+            PedirDatosProducto(codigos, cantidadProductos, out codigo, out nombre, out precio, out stock);
 
-        Console.WriteLine("Producto registrado correctamente.");
+            codigos[cantidadProductos] = codigo;
+            nombres[cantidadProductos] = nombre;
+            precios[cantidadProductos] = precio;
+            stocks[cantidadProductos] = stock;
+
+            cantidadProductos++;
+
+            Console.WriteLine("Producto registrado correctamente.");
         }
 
         // Funcionalidad 2: Mostrar el catálogo completo
